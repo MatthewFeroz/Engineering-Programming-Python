@@ -38,9 +38,22 @@ class DataPipeline:
             self.load()
         self.df = self.df.dropna().copy()
         return self.df
+    
+    def filter(self) -> pd.DataFrame:
+        '''Filter out columns we don't plan to analyze.'''
+        if self.df is None:
+            self.load()
+        cols_to_keep = [
+            "stress", "anxiety", "depression","motivation", "concentration", "time_management",
+            "self_discipline", "procrastination_score", "financial_stress", "sleep_hours", 
+            "late_night_frequency", "phone_unlocks_per_day", "social_media_hours"
+            ]
+        self.df = self.df[cols_to_keep]
+        return self.df
 
 
 if __name__ == "__main__":
     pipe = DataPipeline()
+    pipe.filter()
     pipe.clean()
     print(f"rows={len(pipe.df)}, cols={list(pipe.df.columns)}")
