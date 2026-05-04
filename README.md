@@ -44,13 +44,3 @@ Run the tests:
 ```bash
 pytest -v test_data_pipeline.py
 ```
-
-## Project Plan
-
-The next steps are:
-
-1. Load and clean the student dataset.
-2. Check the data for missing values.
-3. Make basic charts to understand the data.
-4. Compare student habits with GPA.
-5. Build a simple model to predict GPA.
