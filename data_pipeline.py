@@ -5,6 +5,23 @@ from __future__ import annotations
 import pandas as pd
 
 DATA_URL = "https://www.kaggle.com/datasets/sharmajicoder/college-students-habits-and-performance"
+FEATURE_COLUMNS = [
+    "stress",
+    "anxiety",
+    "depression",
+    "motivation",
+    "concentration",
+    "time_management",
+    "self_discipline",
+    "procrastination_score",
+    "financial_stress",
+    "sleep_hours",
+    "late_night_frequency",
+    "screen_time",
+    "phone_unlocks_per_day",
+    "previous_gpa",
+]
+TARGET_COLUMN = "gpa"
 
 
 class DataPipeline:
@@ -39,21 +56,20 @@ class DataPipeline:
         self.df = self.df.dropna().copy()
         return self.df
     
-    def filter(self) -> pd.DataFrame:
-        '''Filter out columns we don't plan to analyze.'''
+    def get_features_and_target(self) -> tuple[pd.DataFrame, pd.Series]:
+        """Return focused input features and the GPA target."""
         if self.df is None:
-            self.load()
-        cols_to_keep = [
-            "stress", "anxiety", "depression","motivation", "concentration", "time_management",
-            "self_discipline", "procrastination_score", "financial_stress", "sleep_hours", 
-            "late_night_frequency", "phone_unlocks_per_day", "social_media_hours"
-            ]
-        self.df = self.df[cols_to_keep]
-        return self.df
+            self.clean()
+        required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
+        missing_columns = [col for col in required_columns if col not in self.df.columns]
+        if missing_columns:
+            raise ValueError(f"Missing required columns: {missing_columns}")
+        features = self.df[FEATURE_COLUMNS].copy()
+        target = self.df[TARGET_COLUMN].copy()
+        return features, target
 
 
 if __name__ == "__main__":
     pipe = DataPipeline()
-    pipe.filter()
-    pipe.clean()
-    print(f"rows={len(pipe.df)}, cols={list(pipe.df.columns)}")
+    X, y = pipe.get_features_and_target()
+    print(f"rows={len(X)}, features={list(X.columns)}, target={y.name}")
