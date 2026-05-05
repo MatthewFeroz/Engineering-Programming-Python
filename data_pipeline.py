@@ -5,6 +5,9 @@ from __future__ import annotations
 import pandas as pd
 
 DATA_URL = "https://www.kaggle.com/datasets/sharmajicoder/college-students-habits-and-performance"
+
+# These columns match the project's narrowed focus on mental health,
+# discipline, sleep, screen time, and prior academic performance.
 FEATURE_COLUMNS = [
     "stress",
     "anxiety",
@@ -55,17 +58,23 @@ class DataPipeline:
             self.load()
         self.df = self.df.dropna().copy()
         return self.df
-    
+
     def get_features_and_target(self) -> tuple[pd.DataFrame, pd.Series]:
         """Return focused input features and the GPA target."""
         if self.df is None:
             self.clean()
+
         required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
-        missing_columns = [col for col in required_columns if col not in self.df.columns]
+        missing_columns = [
+            column for column in required_columns if column not in self.df.columns
+        ]
         if missing_columns:
             raise ValueError(f"Missing required columns: {missing_columns}")
-        features = self.df[FEATURE_COLUMNS].copy()
-        target = self.df[TARGET_COLUMN].copy()
+
+        # Keep inputs and target separate so model training cannot leak GPA
+        # into the feature matrix.
+        features = self.df.loc[:, FEATURE_COLUMNS].copy()
+        target = self.df.loc[:, TARGET_COLUMN].copy()
         return features, target
 
 
