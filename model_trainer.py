@@ -32,7 +32,7 @@ class ModelTrainer:
             random_state=67,
         )
         self.X_train, self.X_test, self.y_train, self.y_test = split_data
-        return split_data
+        return tuple(split_data)
 
     def train(self) -> LinearRegression:
         """Train the linear regression model and return it."""
