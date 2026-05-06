@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pandas as pd
+from utils import find_missing_columns
 
 DATA_URL = "https://www.kaggle.com/datasets/sharmajicoder/college-students-habits-and-performance"
 
@@ -65,11 +66,10 @@ class DataPipeline:
             self.clean()
 
         required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
-        missing_columns = [
-            column for column in required_columns if column not in self.df.columns
-        ]
+        missing_columns = find_missing_columns(self.df.columns, required_columns)
         if missing_columns:
             raise ValueError(f"Missing required columns: {missing_columns}")
+            
 
         # Keep inputs and target separate so model training cannot leak GPA
         # into the feature matrix.
