@@ -55,3 +55,9 @@ def _coefficient_table(model, X: pd.DataFrame, y: pd.Series, predictions) -> pd.
 def _normal_p_value(t_stat: float) -> float:
     """Approximate a two-sided p-value from a t-statistic."""
     return erfc(abs(t_stat) / sqrt(2))
+
+def find_missing_columns(actual_columns, required_columns):
+    """
+    Return the set of required columns that are absent from the dataset. Empty = all requirements met.
+    """
+    return set(required_columns) - set(actual_columns)
