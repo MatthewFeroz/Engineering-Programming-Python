@@ -9,7 +9,7 @@ Main contributions: Created the data pipeline and model trainer, along with supp
 Kinga Kurcaba  
 Main contributions: Implemented tests, created data summary, part of data pipeline.  
 Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)  
-Main contributions: Created the EDA, some of regression model, and the main notebook.   
+Main contributions: Created the EDA, helped with regression model, and the main notebook.   
 
 ## Data Source
 
