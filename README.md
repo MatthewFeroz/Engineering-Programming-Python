@@ -2,6 +2,15 @@
 
 This project analyzes how college students' mental health, discipline, sleep, and screen-time habits relate to academic performance. Using a public Kaggle student habits dataset, the project studies factors such as stress, anxiety, motivation, concentration, procrastination, sleep hours, screen time, and phone use. The final program will train a machine learning model that predicts a student's academic performance score and identifies the strongest predictors.
 
+# Team Members
+
+Matthew Feroz 
+Main contributions:
+Kinga Kurcaba
+Main contributions:
+Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)
+Main contributions: Created the EDA, some of regression model, and the main notebook. 
+
 ## Data Source
 
 The dataset is from Kaggle:
