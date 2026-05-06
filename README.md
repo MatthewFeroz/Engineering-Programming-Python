@@ -4,12 +4,12 @@ This project analyzes how college students' mental health, discipline, sleep, an
 
 # Team Members
 
-Matthew Feroz 
-Main contributions:
-Kinga Kurcaba
-Main contributions:
-Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)
-Main contributions: Created the EDA, some of regression model, and the main notebook. 
+Matthew Feroz  
+Main contributions:  
+Kinga Kurcaba  
+Main contributions:  
+Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)  
+Main contributions: Created the EDA, some of regression model, and the main notebook.   
 
 ## Data Source
 
