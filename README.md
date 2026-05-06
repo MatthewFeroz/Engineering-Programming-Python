@@ -6,9 +6,9 @@ This project analyzes how college students' mental health, discipline, sleep, an
 
 Matthew Feroz  
 Main contributions: Created the data pipeline and model trainer, along with supplimental functions.  
-Kinga Kurcaba (kkurcaba@stevens.edu 20023860) 
+Kinga Kurcaba (kkurcaba@stevens.edu 20023860)      
 Main contributions: Implemented tests, created data summary, added project setup documentation, part of data pipeline.
-Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)  
+Lilian Wierzbicki (lwierzbi@stevens.edu 20010440)      
 Main contributions: Created the EDA, helped with regression model, and the main notebook.   
 
 ## Data Source
