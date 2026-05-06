@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
@@ -39,6 +40,37 @@ class ModelTrainer:
             self.prepare_data()
         self.model.fit(self.X_train, self.y_train)
         return self.model
+    
+    def evaluate(self) -> dict:
+        """Score the model on the test set and print the results.
+ 
+        Metrics:
+            MAE  - average GPA prediction error (lower is better).
+            RMSE - like MAE but punishes large mistakes more.
+            R2   - value from 0 to 1 describing the fraction of GPA variation the model explains
+                   (1.0 = perfect, 0.0 = no better than guessing the mean).
+ 
+        Returns:
+            Dict with keys "mae", "rmse", "r2".
+        """
+        if self.X_train is None:
+            self.train()
+ 
+        predictions = self.model.predict(self.X_test)
+        errors      = predictions - self.y_test
+ 
+        mae  = float(np.mean(np.abs(errors)))
+        rmse = float(np.sqrt(np.mean(errors ** 2)))
+        ss_res = float(np.sum(errors ** 2))
+        ss_tot = float(np.sum((self.y_test - self.y_test.mean()) ** 2))
+        r2   = 1 - ss_res / ss_tot
+ 
+        print("Model evaluation on test set:")
+        print(f"  MAE  (avg GPA error):        {mae:.3f}")
+        print(f"  RMSE (penalises big misses): {rmse:.3f}")
+        print(f"  R2   (1.0 = perfect):        {r2:.3f}")
+ 
+        return {"mae": mae, "rmse": rmse, "r2": r2}
 
     def predict(self, features: pd.DataFrame) -> pd.Series:
         """Predict GPA scores for prepared feature rows."""
@@ -59,7 +91,11 @@ class ModelTrainer:
         return f"ModelTrainer(model=LinearRegression, training_rows={row_count})"
 
 
+
+
 if __name__ == "__main__":
     trainer = ModelTrainer(DataPipeline())
     trainer.train()
+    trainer.evaluate()
     print(trainer)
+
