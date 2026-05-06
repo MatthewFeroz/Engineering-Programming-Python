@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 from data_pipeline import DataPipeline
-
+from utils import evaluate_model
 
 class ModelTrainer:
     """Trains a linear regression model using data from a DataPipeline."""
@@ -45,32 +45,28 @@ class ModelTrainer:
         """Score the model on the test set and print the results.
  
         Metrics:
-            MAE  - average GPA prediction error (lower is better).
-            RMSE - like MAE but punishes large mistakes more.
-            R2   - value from 0 to 1 describing the fraction of GPA variation the model explains
-                   (1.0 = perfect, 0.0 = no better than guessing the mean).
+            MAE  - average GPA prediction error
+            RMSE - average GPA error but punishes large mistakes
+            R2   - fraction of GPA variation explained by model
  
         Returns:
             Dict with keys "mae", "rmse", "r2".
+            Also prints a coefficient table with t-stats and p-values.
         """
         if self.X_train is None:
             self.train()
  
-        predictions = self.model.predict(self.X_test)
-        errors      = predictions - self.y_test
+        coefficient_table, metrics = evaluate_model(self.model, self.X_test, self.y_test)
  
-        mae  = float(np.mean(np.abs(errors)))
-        rmse = float(np.sqrt(np.mean(errors ** 2)))
-        ss_res = float(np.sum(errors ** 2))
-        ss_tot = float(np.sum((self.y_test - self.y_test.mean()) ** 2))
-        r2   = 1 - ss_res / ss_tot
- 
+        print("Coefficient table:")
+        print(coefficient_table.to_string(index=False))
+        print()
         print("Model evaluation on test set:")
-        print(f"  MAE  (avg GPA error):        {mae:.3f}")
-        print(f"  RMSE (penalises big misses): {rmse:.3f}")
-        print(f"  R2   (1.0 = perfect):        {r2:.3f}")
+        print(f"  MAE  (avg GPA error):        {metrics['mae']:.3f}")
+        print(f"  RMSE (penalises big misses): {metrics['rmse']:.3f}")
+        print(f"  R2   (1.0 = perfect):        {metrics['r2']:.3f}")
  
-        return {"mae": mae, "rmse": rmse, "r2": r2}
+        return metrics
 
     def predict(self, features: pd.DataFrame) -> pd.Series:
         """Predict GPA scores for prepared feature rows."""
