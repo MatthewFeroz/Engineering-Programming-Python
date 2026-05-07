@@ -4,7 +4,7 @@ related to GPA, and provides visuals."""
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import sklearn
+
 from data_pipeline import DataPipeline
 
 
