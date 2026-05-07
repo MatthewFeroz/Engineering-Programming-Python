@@ -26,6 +26,8 @@ All members participated in design discussions, code review, and final testing.
 
 **Approach.** Load and clean a Kaggle student-habits dataset (`DataPipeline`), narrow to 14 habit/well-being features plus prior GPA, run EDA on correlations with GPA (`data_eda.py`), train a linear regression on an 80/20 split (`ModelTrainer`), and evaluate with MAE, RMSE, R², and per-feature t-statistics. The walkthrough lives in `main.ipynb`; reusable logic sits in the `.py` modules.
 
+**Reproducibility.** The train/test split uses `random_state=67`, so re-runs produce the same splits and metrics.
+
 ## Dependencies / Libraries
 
 - Python 3.12, 3.13, or 3.14
