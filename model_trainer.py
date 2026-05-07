@@ -2,25 +2,46 @@
 
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 from data_pipeline import DataPipeline
 from utils import evaluate_model
 
 
 class ModelTrainer:
-    """Trains a linear regression model using data from a DataPipeline."""
+    """Trains a standardized linear regression model using data from a DataPipeline.
+
+    Features are z-scored with ``StandardScaler`` before being fed to
+    ``LinearRegression`` so coefficients are on a comparable scale and
+    correlated columns do not produce wildly inflated weights.
+    """
 
     def __init__(self, pipeline: DataPipeline):
-        """Store the pipeline and create the regression model."""
+        """Store the pipeline and create the scaler + regression pipeline."""
         self.pipeline = pipeline
-        self.model = LinearRegression()
+        self.model = Pipeline([
+            ("scaler", StandardScaler()),
+            ("regression", LinearRegression()),
+        ])
         self.X_train: pd.DataFrame | None = None
         self.X_test: pd.DataFrame | None = None
         self.y_train: pd.Series | None = None
         self.y_test: pd.Series | None = None
+
+    @property
+    def coef_(self) -> np.ndarray:
+        """Return the underlying regression coefficients (on the scaled inputs)."""
+        return self.model.named_steps["regression"].coef_
+
+    @property
+    def intercept_(self) -> float:
+        """Return the underlying regression intercept (on the scaled inputs)."""
+        return self.model.named_steps["regression"].intercept_
 
     def prepare_data(self) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         """Split the focused features and GPA target into training and test data."""
@@ -34,8 +55,8 @@ class ModelTrainer:
         self.X_train, self.X_test, self.y_train, self.y_test = split_data
         return tuple(split_data)
 
-    def train(self) -> LinearRegression:
-        """Train the linear regression model and return it."""
+    def train(self) -> Pipeline:
+        """Fit the scaler + linear regression pipeline and return it."""
         if self.X_train is None or self.y_train is None:
             self.prepare_data()
         self.model.fit(self.X_train, self.y_train)
@@ -84,7 +105,10 @@ class ModelTrainer:
     def __str__(self) -> str:
         """Return a short summary of the trainer."""
         row_count = len(self)
-        return f"ModelTrainer(model=LinearRegression, training_rows={row_count})"
+        return (
+            f"ModelTrainer(model=StandardScaler+LinearRegression, "
+            f"training_rows={row_count})"
+        )
 
 
 

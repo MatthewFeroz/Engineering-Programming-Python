@@ -9,6 +9,14 @@ DATA_URL = "https://www.kaggle.com/datasets/sharmajicoder/college-students-habit
 
 # These columns match the project's narrowed focus on mental health,
 # discipline, sleep, screen time, and prior academic performance.
+#
+# Note: ``screen_time`` is intentionally excluded. In the source data it is
+# near-perfectly collinear with ``late_night_frequency`` (the two combined
+# produce ±85 cancelling coefficients in OLS, making predictions on
+# out-of-distribution inputs explode). ``phone_unlocks_per_day`` already
+# captures the "phone use intensity" signal, while ``late_night_frequency``
+# captures a distinct timing/sleep signal, so dropping ``screen_time``
+# removes the redundant axis without losing unique information.
 FEATURE_COLUMNS = [
     "stress",
     "anxiety",
@@ -21,7 +29,6 @@ FEATURE_COLUMNS = [
     "financial_stress",
     "sleep_hours",
     "late_night_frequency",
-    "screen_time",
     "phone_unlocks_per_day",
     "previous_gpa",
 ]

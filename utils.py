@@ -7,6 +7,7 @@ from math import erfc, sqrt
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.pipeline import Pipeline
 
 
 def evaluate_model(
@@ -27,12 +28,25 @@ def evaluate_model(
 
 
 def _coefficient_table(model, X: pd.DataFrame, y: pd.Series, predictions) -> pd.DataFrame:
-    """Build coefficient, t-statistic, and approximate p-value rows."""
+    """Build coefficient, t-statistic, and approximate p-value rows.
+
+    When ``model`` is a sklearn ``Pipeline`` such as StandardScaler followed
+    by LinearRegression, the coefficients live on the transformed feature
+    space. The design matrix has to be transformed the same way before
+    computing standard errors.
+    """
+    if isinstance(model, Pipeline):
+        regressor = model[-1]
+        design_features = model[:-1].transform(X)
+    else:
+        regressor = model
+        design_features = X.to_numpy() if hasattr(X, "to_numpy") else np.asarray(X)
+
     feature_names = ["intercept"] + list(X.columns)
-    coefficients = np.concatenate(([model.intercept_], model.coef_))
+    coefficients = np.concatenate(([regressor.intercept_], regressor.coef_))
 
     # Add the intercept column because LinearRegression stores it separately.
-    design = np.column_stack((np.ones(len(X)), X.to_numpy()))
+    design = np.column_stack((np.ones(len(design_features)), design_features))
     residuals = y.to_numpy() - predictions
 
     # Standard errors come from the ordinary least squares covariance formula.
