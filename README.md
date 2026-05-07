@@ -20,15 +20,13 @@ Course: AAI / CPE / EE 551 - Engineering Programming (Python), Stevens Institute
 
 All members participated in design discussions, code review, and final testing.
 
-## Project Description
+## Problem & Approach
 
-### Overview
+**Problem.** Can self-reported mental-health, sleep, focus, and digital-behavior signals predict a student's GPA, and which of those signals matter most?
 
-College students' academic outcomes are shaped by mental health, sleep, focus, self-discipline, and digital behavior. This project loads and cleans a public Kaggle student-habits dataset, runs exploratory data analysis on the relationship between those factors and GPA, trains a linear regression model on a focused set of mental-health, discipline, sleep, screen-time, and prior-GPA features, evaluates it with coefficient statistics and standard regression metrics (MAE, RMSE, R²), and predicts a GPA score for a custom student profile.
+**Approach.** Load and clean a Kaggle student-habits dataset (`DataPipeline`), narrow to 14 habit/well-being features plus prior GPA, run EDA on correlations with GPA (`data_eda.py`), train a linear regression on an 80/20 split (`ModelTrainer`), and evaluate with MAE, RMSE, R², and per-feature t-statistics. The walkthrough lives in `main.ipynb`; reusable logic sits in the `.py` modules.
 
-The walkthrough lives in `main.ipynb`. Reusable logic is split across small `.py` modules so the notebook stays focused on narration and results.
-
-### Dependencies / Libraries
+## Dependencies / Libraries
 
 - Python 3.12, 3.13, or 3.14
 - pandas
@@ -40,7 +38,7 @@ The walkthrough lives in `main.ipynb`. Reusable logic is split across small `.py
 
 All dependencies are listed in `requirements.txt`.
 
-### File / Module Structure
+## File / Module Structure
 
 ```text
 Engineering-Programming-Python/
